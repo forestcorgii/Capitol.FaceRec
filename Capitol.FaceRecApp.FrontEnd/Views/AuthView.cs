@@ -23,7 +23,7 @@ namespace Capitol.FaceRecApp.FrontEnd.Views
 
             AuthController = new AuthController(
                Program.VerilookFactory.CreateManager(MainFaceView, NBiometricCaptureOptions.Stream),
-               Program.UserDbManager
+               Program.AdministratorDbManager
             );
 
             BtnRetry.Visible = false;

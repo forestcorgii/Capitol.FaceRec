@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 
 namespace Capitol.FaceRecApp.FrontEnd.Domain
 {
-    public class AuthorizedUser
+    public class Administrator
     {
+        public int Id { get; set; }
         public string EEId { get; set; }
+
+        public DateTime DateAdded { get; set; }
     }
 }

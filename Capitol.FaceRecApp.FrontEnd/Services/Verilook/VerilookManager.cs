@@ -22,7 +22,10 @@ namespace Capitol.FaceRecApp.FrontEnd.Services
         private NBiometricCaptureOptions CaptureOption { get; set; }
 
 
-        public VerilookManager(NBiometricClient faceClient, NBiometricClient streamClient, NFaceView faceView, NBiometricCaptureOptions captureOptions)
+        public VerilookManager(NBiometricClient faceClient, 
+            NBiometricClient streamClient, 
+            NFaceView faceView, 
+            NBiometricCaptureOptions captureOptions)
         {
             Client = faceClient;
             StreamClient = streamClient;
@@ -39,7 +42,7 @@ namespace Capitol.FaceRecApp.FrontEnd.Services
                 return subj;
             return null;
         }
-
+         
         public async Task<NBiometricStatus> CaptureFaceAsync(NSubject subject)
         {
             subject.Faces.Add(new NFace() { CaptureOptions = CaptureOption });
@@ -59,7 +62,27 @@ namespace Capitol.FaceRecApp.FrontEnd.Services
             if (subject != null)
             {
                 subject.Id = id;
-                NBiometricStatus da = await Client.EnrollAsync(subject, true);
+                NBiometricStatus enrollStatus = await Client.EnrollAsync(subject, true);
+                if (enrollStatus == NBiometricStatus.Ok)
+                    return subject.Id;
+                else if (enrollStatus == NBiometricStatus.DuplicateFound)
+                {
+                    string duplicateSubjectId = await IdentifyAsync(subject);
+                    if(duplicateSubjectId != "NOMATCH")
+                        MessageBoxes.Error($"Face subject conflicted with {duplicateSubjectId}. ");
+                }
+                else
+                    MessageBoxes.Error(enrollStatus.ToString());
+            }
+            return "";
+        }
+
+        public async Task<string> UpdateAsync(NSubject subject, string id)
+        {
+            if (subject != null)
+            {
+                subject.Id = id;
+                NBiometricStatus da = await Client.UpdateAsync(subject);
                 if (da == NBiometricStatus.Ok)
                     return subject.Id;
                 else
@@ -102,7 +125,7 @@ namespace Capitol.FaceRecApp.FrontEnd.Services
                 }
             }
             catch (Exception ex) { MessageBoxes.Error(ex.Message); }
-            return "";
+            return "NOMATCH";
         }
     }
 }

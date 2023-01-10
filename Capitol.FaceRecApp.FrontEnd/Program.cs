@@ -1,10 +1,12 @@
 ﻿using Capitol.FaceRecApp.FrontEnd.Persistence;
 using Capitol.FaceRecApp.FrontEnd.Services;
+using Capitol.FaceRecApp.FrontEnd.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Extensions.Configuration;
 
 namespace Capitol.FaceRecApp.FrontEnd
 {
@@ -12,7 +14,7 @@ namespace Capitol.FaceRecApp.FrontEnd
     {
         public static VerilookManagerFactory VerilookFactory;
         public static TimelogDbManager TimelogDbManager;
-        public static UserDbManager UserDbManager;
+        public static AdministratorDbManager AdministratorDbManager;
 
         /// <summary>
         /// The main entry point for the application.
@@ -20,16 +22,27 @@ namespace Capitol.FaceRecApp.FrontEnd
         [STAThread]
         static void Main()
         {
-            VerilookFactory = new VerilookManagerFactory("DSN=mysql_dsn;UID=root;PWD=Soft1234", "subjects");
+            IConfigurationRoot configurationRoot = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
 
-            string connectionString = "Server=localhost;Database=capitol_facerec;Uid=root;Pwd=Soft1234;";
-            UserDbManager = new UserDbManager(connectionString);
+            VerilookFactory = new VerilookManagerFactory(configurationRoot.GetConnectionString("default_dsn"), "subjects");
+
+            string connectionString = configurationRoot.GetConnectionString("default");
+
+            AdministratorDbManager = new AdministratorDbManager(connectionString);
             TimelogDbManager = new TimelogDbManager(connectionString);
-
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainView());
+
+            if (AdministratorDbManager.GetAdministratorCount() == 0)
+                new AdministratorView().ShowDialog();
+
+            MainView mainView = new MainView()
+            {
+                Text = $"Capitol FaceRec Attendance v{Application.ProductVersion}"
+            };
+
+            Application.Run(mainView);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Capitol.FaceRecApp.FrontEnd.Domain
 {
     public class Timelog
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string EEId { get; set; }
 
         public DateTime Timestamp { get; set; }

@@ -24,7 +24,7 @@ namespace Capitol.FaceRecApp.FrontEnd.Persistence
             //_connection.Open();
             try
             {
-                using (MySqlDataReader reader = new MySqlCommand($"SELECT * FROM queued_timelogs WHERE ee_id='{eeId}' ORDER BY timestamp DESC LIMIT 1;", _connection).ExecuteReader())
+                using (MySqlDataReader reader = new MySqlCommand($"SELECT * FROM timelogs WHERE ee_id='{eeId}' ORDER BY timestamp DESC LIMIT 1;", _connection).ExecuteReader())
                 {
                     if (reader.HasRows)
                     {
@@ -50,16 +50,15 @@ namespace Capitol.FaceRecApp.FrontEnd.Persistence
             //_connection.Open();
             try
             {
-                using (MySqlDataReader reader = new MySqlCommand($"SELECT * FROM queued_timelogs ORDER BY timestamp DESC LIMIT {limit};", _connection).ExecuteReader())
+                using (MySqlDataReader reader = new MySqlCommand($"SELECT * FROM timelogs ORDER BY timestamp DESC LIMIT {limit};", _connection).ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        timelogs.Add(new Timelog()
-                        {
-                            Id = reader.GetInt32("id"),
-                            EEId = reader.GetString("ee_id"),
-                            Timestamp = reader.GetDateTime("timestamp"),
-                        });
+                        Timelog timelog = new Timelog();
+                        timelog.Id = reader.GetString("id");
+                        timelog.EEId = reader.GetString("ee_id");
+                        timelog.Timestamp = reader.GetDateTime("timestamp");
+                        timelogs.Add(timelog);
                     }
                 }
             }
@@ -68,54 +67,15 @@ namespace Capitol.FaceRecApp.FrontEnd.Persistence
 
             return timelogs;
         }
+         
+         
 
-        public IEnumerable<Timelog> GetQueuedTimelogs()
-        {
-            var timelogs = new List<Timelog>();
-            //_connection.Open();
-            try
-            {
-                using (MySqlDataReader reader = new MySqlCommand($"SELECT * FROM queued_timelogs;", _connection).ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        timelogs.Add(new Timelog()
-                        {
-                            Id = reader.GetInt32("id"),
-                            EEId = reader.GetString("ee_id"),
-                            Timestamp = reader.GetDateTime("timestamp"),
-                        });
-                    }
-                }
-            }
-            catch (Exception ex) { Error(ex.Message, ex.Source); }
-            //finally { _connection.Close(); }
-
-            return timelogs;
-        }
-
-        public int GetQueuedCount()
-        {
-            int count = 0;
-            try
-            {
-                using (MySqlDataReader reader = new MySqlCommand($"SELECT COUNT(*) FROM queued_timelogs;", _connection).ExecuteReader())
-                {
-                    reader.Read();
-                    count = reader.GetInt32(0);
-                }
-            }
-            catch (Exception ex) { Error(ex.Message, ex.Source); }
-            return count;
-        }
-
-
-        public void AddToQueue(Timelog timelog)
+        public void SaveTimelog(Timelog timelog)
         {
             //_connection.Open();
             try
             {
-                MySqlCommand command = new MySqlCommand("INSERT INTO queued_timelogs (ee_id,timestamp) VALUES (@ee_id,@timestamp)", _connection);
+                MySqlCommand command = new MySqlCommand("INSERT INTO timelogs (ee_id,timestamp) VALUES (@ee_id,@timestamp)", _connection);
                 command.Parameters.AddWithValue("ee_id", timelog.EEId);
                 command.Parameters.AddWithValue("timestamp", timelog.Timestamp);
                 command.ExecuteNonQuery();

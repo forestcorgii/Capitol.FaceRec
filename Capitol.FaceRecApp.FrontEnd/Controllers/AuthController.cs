@@ -13,9 +13,9 @@ namespace Capitol.FaceRecApp.FrontEnd.Controllers
 {
     public class AuthController : VerilookControllerBase
     {
-        UserDbManager UserDbManager;
+        AdministratorDbManager UserDbManager;
 
-        public AuthController(VerilookManager verilookManager, UserDbManager userDbManager) : base(verilookManager)
+        public AuthController(VerilookManager verilookManager, AdministratorDbManager userDbManager) : base(verilookManager)
         {
             UserDbManager = userDbManager;
         }
@@ -30,7 +30,7 @@ namespace Capitol.FaceRecApp.FrontEnd.Controllers
                     NSubject subjectFound = new NSubject();
                     subjectFound.Faces.Add(result[0]);
                     string eeId = await Manager.IdentifyAsync(subjectFound);
-                    return UserDbManager.FindUser(eeId) != null;
+                    return UserDbManager.FindAdministrator(eeId) != null;
                 }
             }
             return false;

@@ -35,11 +35,11 @@ namespace Capitol.FaceRecApp.FrontEnd.Services
 
             FaceClient = new NBiometricClient()
             {
-                MatchingMaximalResultCount = 3,
+                MatchingMaximalResultCount = 5,
                 FacesDetectAllFeaturePoints = false,
                 BiometricTypes = NBiometricType.Face,
-                FacesTemplateSize = NTemplateSize.Large,
-                FacesMatchingSpeed = NMatchingSpeed.Low,
+                FacesTemplateSize = NTemplateSize.Small,
+                FacesMatchingSpeed = NMatchingSpeed.High,
             };
             FaceClient.SetDatabaseConnectionToOdbc(OdbcConnectionString, TableName);
 
@@ -47,8 +47,11 @@ namespace Capitol.FaceRecApp.FrontEnd.Services
             {
                 UseDeviceManager = true,
                 FacesDetectAllFeaturePoints = false,
+                MatchingMaximalResultCount = 5,
                 BiometricTypes = NBiometricType.Face,
-                Timeout = new TimeSpan(1, 0, 0, 3)
+                FacesTemplateSize = NTemplateSize.Small,
+                FacesMatchingSpeed = NMatchingSpeed.High,
+                Timeout = new TimeSpan(1, 0, 0, 1)
             };
         }
         

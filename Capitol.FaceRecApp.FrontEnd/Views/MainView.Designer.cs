@@ -30,19 +30,21 @@ namespace Capitol.FaceRecApp.FrontEnd
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.MainFaceView = new Neurotec.Biometrics.Gui.NFaceView();
             this.lbStatusMessage = new System.Windows.Forms.Label();
             this.FsTimer = new System.Windows.Forms.Timer(this.components);
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.MbtnEnroll = new System.Windows.Forms.ToolStripMenuItem();
             this.clEEId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clTimestamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clTimestamp2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clDateSent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.MbtnEnroll = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.LbSubjectCount = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainFaceView
@@ -54,11 +56,24 @@ namespace Capitol.FaceRecApp.FrontEnd
             this.MainFaceView.FaceIds = null;
             this.MainFaceView.IcaoArrowsColor = System.Drawing.Color.Red;
             this.MainFaceView.Location = new System.Drawing.Point(17, 27);
-            this.MainFaceView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MainFaceView.Margin = new System.Windows.Forms.Padding(2);
             this.MainFaceView.Name = "MainFaceView";
-            this.MainFaceView.ShowIcaoArrows = true;
-            this.MainFaceView.ShowTokenImageRectangle = true;
-            this.MainFaceView.Size = new System.Drawing.Size(687, 219);
+            this.MainFaceView.ShowAge = false;
+            this.MainFaceView.ShowBaseFeaturePoints = false;
+            this.MainFaceView.ShowEmotion = false;
+            this.MainFaceView.ShowEthnicity = false;
+            this.MainFaceView.ShowExpression = false;
+            this.MainFaceView.ShowEyes = false;
+            this.MainFaceView.ShowEyesConfidence = true;
+            this.MainFaceView.ShowFaceConfidence = false;
+            this.MainFaceView.ShowFaceQuality = false;
+            this.MainFaceView.ShowGender = false;
+            this.MainFaceView.ShowIcaoArrows = false;
+            this.MainFaceView.ShowMouth = false;
+            this.MainFaceView.ShowNose = false;
+            this.MainFaceView.ShowProperties = false;
+            this.MainFaceView.ShowTokenImageRectangle = false;
+            this.MainFaceView.Size = new System.Drawing.Size(526, 238);
             this.MainFaceView.TabIndex = 18;
             this.MainFaceView.TokenImageRectangleColor = System.Drawing.Color.White;
             // 
@@ -66,16 +81,16 @@ namespace Capitol.FaceRecApp.FrontEnd
             // 
             this.lbStatusMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbStatusMessage.Location = new System.Drawing.Point(14, 669);
+            this.lbStatusMessage.Location = new System.Drawing.Point(14, 661);
             this.lbStatusMessage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbStatusMessage.Name = "lbStatusMessage";
-            this.lbStatusMessage.Size = new System.Drawing.Size(691, 37);
+            this.lbStatusMessage.Size = new System.Drawing.Size(522, 37);
             this.lbStatusMessage.TabIndex = 20;
             this.lbStatusMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FsTimer
             // 
-            this.FsTimer.Interval = 2000;
+            this.FsTimer.Interval = 3000;
             this.FsTimer.Tick += new System.EventHandler(this.FsTimer_Tick);
             // 
             // dataGridView1
@@ -91,39 +106,13 @@ namespace Capitol.FaceRecApp.FrontEnd
             this.clTimestamp,
             this.clTimestamp2,
             this.clDateSent});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridView1.Location = new System.Drawing.Point(18, 253);
+            this.dataGridView1.Location = new System.Drawing.Point(18, 272);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(686, 411);
+            this.dataGridView1.Size = new System.Drawing.Size(525, 384);
             this.dataGridView1.TabIndex = 21;
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MbtnEnroll});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
-            this.menuStrip1.Size = new System.Drawing.Size(722, 25);
-            this.menuStrip1.TabIndex = 22;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // MbtnEnroll
-            // 
-            this.MbtnEnroll.Name = "MbtnEnroll";
-            this.MbtnEnroll.Size = new System.Drawing.Size(49, 19);
-            this.MbtnEnroll.Text = "Enroll";
-            this.MbtnEnroll.Click += new System.EventHandler(this.MbtnEnroll_Click);
             // 
             // clEEId
             // 
@@ -158,11 +147,46 @@ namespace Capitol.FaceRecApp.FrontEnd
             this.clDateSent.ReadOnly = true;
             this.clDateSent.Visible = false;
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MbtnEnroll});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
+            this.menuStrip1.Size = new System.Drawing.Size(554, 25);
+            this.menuStrip1.TabIndex = 22;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // MbtnEnroll
+            // 
+            this.MbtnEnroll.Name = "MbtnEnroll";
+            this.MbtnEnroll.Size = new System.Drawing.Size(92, 19);
+            this.MbtnEnroll.Text = "Administrator";
+            this.MbtnEnroll.Click += new System.EventHandler(this.MbtnEnroll_Click);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.LbSubjectCount});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 698);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(554, 22);
+            this.statusStrip1.TabIndex = 23;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // LbSubjectCount
+            // 
+            this.LbSubjectCount.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.LbSubjectCount.Name = "LbSubjectCount";
+            this.LbSubjectCount.Size = new System.Drawing.Size(0, 17);
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(722, 720);
+            this.ClientSize = new System.Drawing.Size(554, 720);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.lbStatusMessage);
             this.Controls.Add(this.MainFaceView);
@@ -175,6 +199,8 @@ namespace Capitol.FaceRecApp.FrontEnd
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -192,6 +218,8 @@ namespace Capitol.FaceRecApp.FrontEnd
         private System.Windows.Forms.DataGridViewTextBoxColumn clTimestamp;
         private System.Windows.Forms.DataGridViewTextBoxColumn clTimestamp2;
         private System.Windows.Forms.DataGridViewTextBoxColumn clDateSent;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel LbSubjectCount;
     }
 }
 

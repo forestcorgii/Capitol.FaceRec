@@ -11,7 +11,6 @@ using Capitol.FaceRecApp.FrontEnd.Controllers;
 using Capitol.FaceRecApp.FrontEnd.Domain;
 using Capitol.FaceRecApp.FrontEnd.Persistence;
 using Capitol.FaceRecApp.FrontEnd.Services;
-using Capitol.FaceRecApp.FrontEnd.Services.Sender;
 using Capitol.FaceRecApp.FrontEnd.Views;
 using Neurotec.Biometrics;
 
@@ -20,7 +19,6 @@ namespace Capitol.FaceRecApp.FrontEnd
     public partial class MainView : Form
     {
         MainController MainController;
-        AuthController AuthController;
 
         public MainView()
         {
@@ -31,6 +29,7 @@ namespace Capitol.FaceRecApp.FrontEnd
                 Program.TimelogDbManager
             );
 
+
             LoadPreview();
 
             StartStreaming();
@@ -40,6 +39,8 @@ namespace Capitol.FaceRecApp.FrontEnd
         {
             IEnumerable<Timelog> timelogs = MainController.LoadPreviewTimelogs();
             dataGridView1.DataSource = timelogs;
+
+            LbSubjectCount.Text = $" Total Subject Registered: {timelogs.Count()}";
         }
 
         private async void StartStreaming()
@@ -57,18 +58,23 @@ namespace Capitol.FaceRecApp.FrontEnd
         {
             FsTimer.Stop();
 
-            string resultId = await MainController.IdentifyFace();
-            if (!string.IsNullOrEmpty(resultId))
-            {
-                Timelog timelog = MainController.AddTimelogToQueue(resultId, DateTime.Now);
-                if (timelog != null)
+            var result = await MainController.IdentifyFace();
+            if (result is string[] idsFound)
+                foreach (string ids in idsFound)
                 {
-                    LoadPreview();
-                    lbStatusMessage.Text = $"Logged {resultId}";
+                    Timelog timelog = MainController.SaveTimelog(ids, DateTime.Now);
+                    if (timelog != null)
+                    {
+                        LoadPreview();
+                        lbStatusMessage.Text = $"Logged {ids}";
+                    }
                 }
-            }
-            else
-                lbStatusMessage.Text = "No match found, please try again.";
+
+            if (result is string statusMsg)
+                if (statusMsg == "NOFACE")
+                    lbStatusMessage.Text = "Stand By...";
+                else if (statusMsg == "NOMATCH")
+                    lbStatusMessage.Text = "No match found, please try again.";
 
             FsTimer.Start();
         }
@@ -76,15 +82,15 @@ namespace Capitol.FaceRecApp.FrontEnd
         private void MbtnEnroll_Click(object sender, EventArgs e)
         {
             StopStreaming();
-            
-            var authView = new AuthView();
-            if (authView.ShowDialog() == DialogResult.OK)
-            {
-                var enrollmentView = new EnrollmentView();
-                enrollmentView.ShowDialog();
-            }
 
+            if (new AuthView().ShowDialog() == DialogResult.OK)
+                new AdministratorView().ShowDialog();
+
+            LoadPreview();
+            
             StartStreaming();
         }
+
+
     }
 }

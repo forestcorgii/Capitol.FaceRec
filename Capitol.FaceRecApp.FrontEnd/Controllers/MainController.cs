@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Capitol.FaceRecApp.FrontEnd.Domain;
 using Capitol.FaceRecApp.FrontEnd.Persistence;
 using Capitol.FaceRecApp.FrontEnd.Services;
-using Capitol.FaceRecApp.FrontEnd.Services.Sender;
 using Capitol.FaceRecApp.FrontEnd.Shared;
 using Neurotec.Biometrics;
 
@@ -38,12 +37,12 @@ namespace Capitol.FaceRecApp.FrontEnd.Controllers
             return false;
         }
 
-        public Timelog AddTimelogToQueue(string id, DateTime timestamp)
+        public Timelog SaveTimelog(string id, DateTime timestamp)
         {
             if (ValidateTimelog(id, timestamp))
             {
                 Timelog newTimelog = new Timelog() { EEId = id, Timestamp = timestamp };
-                TimelogDbManager.AddToQueue(newTimelog);
+                TimelogDbManager.SaveTimelog(newTimelog);
                 return newTimelog;
             }
 
@@ -51,19 +50,28 @@ namespace Capitol.FaceRecApp.FrontEnd.Controllers
         }
 
 
-        public async Task<string> IdentifyFace()
+        public async Task<object> IdentifyFace()
         {
             if (CurrentSubject != null && CurrentSubject.Faces.Any())
             {
                 NFace[] result = await Manager.DetectAsync(CurrentSubject);
                 if (result.Any())
                 {
-                    NSubject subjectFound = new NSubject();
-                    subjectFound.Faces.Add(result[0]);
-                    return await Manager.IdentifyAsync(subjectFound);
+                    List<string> idsFound = new List<string>();
+                    foreach (NFace face in result)
+                    {
+                        NSubject subjectFound = new NSubject();
+                        subjectFound.Faces.Add(face);
+                        string resultId = await Manager.IdentifyAsync(subjectFound);
+                        if (resultId != "NOMATCH")
+                            idsFound.Add(resultId);
+                    }
+                    if (idsFound.Any())
+                        return idsFound;
+                    return "NOMATCH";
                 }
             }
-            return string.Empty;
+            return "NOFACE";
         }
 
     }

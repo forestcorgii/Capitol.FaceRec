@@ -23,17 +23,16 @@ namespace Capitol.FaceRecApp.FrontEnd.Controllers
             CurrentSubject = new NSubject();
         }
 
+        public int GetSubjectCount() => Manager.Client.GetCount();
+
+
         public async Task<bool> ValidateId(string id)
         {
             if (!string.IsNullOrEmpty(id))
             {
                 if (await Manager.FindSubjectById(id) is null)
                     return true;
-                else
-                    MessageBoxes.Error("Employee Id already exists.");
             }
-            else
-                MessageBoxes.Error("Invalid Employee Id format.");
 
             return false;
         }
@@ -45,7 +44,7 @@ namespace Capitol.FaceRecApp.FrontEnd.Controllers
         {
             Manager.StreamClient.ForceStart();
             await Manager.StreamClient.ClearAsync();
-            
+
             if (CurrentSubject.Faces.Any())
                 CurrentSubject.Faces[0].Image = null;
         }
